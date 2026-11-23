@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # CollegeManagementSystem
 
 
@@ -91,3 +92,215 @@ For open source projects, say how it is licensed.
 
 ## Project status
 If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+=======
+# 🎓 College Management System (Full Stack)
+
+A clean, modern, and easy-to-understand full stack **College Management System** built with **React**, **Spring Boot 3**, **Spring JDBC (JdbcTemplate)**, and **MySQL**.
+
+Designed with clarity and simplicity in mind: no overcomplicated ORM boilerplate or complex configs—just straightforward relational data models, explicit SQL queries with `JdbcTemplate`, RESTful APIs, and an intuitive React dashboard.
+
+---
+
+## 🏛️ System Architecture
+
+```mermaid
+flowchart LR
+    subgraph Frontend["React (Vite)"]
+        UI["Dashboard UI\n(Components & Views)"]
+        Client["api/client.js\n(Fetch Client)"]
+        UI --> Client
+    end
+
+    subgraph Backend["Spring Boot 3 (Java 21)"]
+        Controller["REST Controllers\n(@RestController)"]
+        Service["Service Layer\n(@Service)"]
+        DAO["DAO Layer\n(JdbcTemplate + RowMapper)"]
+        
+        Client -->|HTTP / JSON| Controller
+        Controller --> Service
+        Service --> DAO
+    end
+
+    subgraph Storage["Database Layer"]
+        MySQL[("MySQL Database\n(college_db)")]
+        DAO -->|SQL Queries / PreparedStatements| MySQL
+    end
+```
+
+---
+
+## 📂 Project Structure
+
+```
+CollegeManagementSystem/
+├── backend/                               # Spring Boot Backend
+│   ├── pom.xml                            # Maven dependencies (Web, JDBC, MySQL, H2)
+│   ├── mvnw.cmd                           # Maven wrapper script
+│   └── src/
+│       ├── main/
+│       │   ├── java/com/college/cms/
+│       │   │   ├── CollegeManagementApplication.java  # Main Application class
+│       │   │   ├── config/WebConfig.java             # CORS & API Configuration
+│       │   │   ├── model/                            # Data Models (POJOs)
+│       │   │   │   ├── Student.java
+│       │   │   │   ├── Course.java
+│       │   │   │   ├── Department.java
+│       │   │   │   ├── Faculty.java
+│       │   │   │   ├── Enrollment.java
+│       │   │   │   └── DashboardStats.java
+│       │   │   ├── dao/                              # Data Access Objects (JdbcTemplate)
+│       │   │   │   ├── StudentDao.java
+│       │   │   │   ├── CourseDao.java
+│       │   │   │   ├── DepartmentDao.java
+│       │   │   │   ├── FacultyDao.java
+│       │   │   │   └── EnrollmentDao.java
+│       │   │   ├── service/                          # Business logic
+│       │   │   │   ├── StudentService.java
+│       │   │   │   ├── CourseService.java
+│       │   │   │   ├── DepartmentService.java
+│       │   │   │   ├── FacultyService.java
+│       │   │   │   ├── EnrollmentService.java
+│       │   │   │   └── DashboardService.java
+│       │   │   └── controller/                       # REST Controllers
+│       │   │       ├── StudentController.java        # /api/students
+│       │   │       ├── CourseController.java         # /api/courses
+│       │   │       ├── DepartmentController.java     # /api/departments
+│       │   │       ├── FacultyController.java        # /api/faculty
+│       │   │       ├── EnrollmentController.java     # /api/enrollments
+│       │   │       ├── DashboardController.java      # /api/dashboard
+│       │   │       └── GlobalExceptionHandler.java
+│       │   └── resources/
+│       │       ├── application.properties            # MySQL database configuration
+│       │       ├── application-dev.properties        # Out-of-the-box H2 in-memory profile
+│       │       ├── schema.sql                        # Table definitions
+│       │       └── data.sql                          # Seed data
+│       └── test/java/...                             # Integration test suite
+│
+├── frontend/                              # React Frontend (Vite)
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── index.html
+│   └── src/
+│       ├── App.jsx                        # Main state and tab navigation
+│       ├── main.jsx                       # React DOM entry
+│       ├── api/client.js                  # API calls with offline demo fallback
+│       ├── styles/app.css                 # Clean modern dashboard styling
+│       └── components/
+│           ├── Navbar.jsx                 # Header with backend health indicator
+│           ├── Sidebar.jsx                # Responsive navigation sidebar
+│           ├── DashboardView.jsx          # Metric cards and overview tables
+│           ├── StudentsView.jsx           # Student management (CRUD, Search, Filter)
+│           ├── CoursesView.jsx            # Course catalog & credit cards
+│           ├── FacultyView.jsx            # Professors & HOD directory
+│           ├── DepartmentsView.jsx        # Academic departments summary
+│           ├── EnrollmentsView.jsx        # Student enrollments & grading
+│           └── Modal.jsx                  # Reusable accessible modal dialog
+│
+├── database/                              # MySQL Scripts
+│   ├── schema.sql                         # MySQL database & table creation script
+│   └── seed_data.sql                      # Realistic sample data script
+│
+├── start-backend.bat                      # 1-Click start script for Backend
+├── start-frontend.bat                     # 1-Click start script for Frontend
+└── README.md                              # Complete documentation
+```
+
+---
+
+## 🗄️ Database Design (MySQL)
+
+The relational schema is simple, clean, and normalized:
+
+```
++---------------+        1:N        +-------------+
+|  departments  | <---------------- |   faculty   |
++---------------+                   +-------------+
+       |                                   |
+       | 1:N                               | 1:N
+       v                                   v
++---------------+        1:N        +-------------+
+|   students    |                   |   courses   |
++---------------+                   +-------------+
+       |                                   |
+       | 1:N                               | 1:N
+       +-------------> +-------------+ <---+
+                       | enrollments |
+                       +-------------+
+```
+
+### Table Definitions
+
+1. **`departments`**: Stores academic divisions (`department_id`, `department_name`, `department_code`, `building`).
+2. **`faculty`**: Stores professors and lecturers (`faculty_id`, `first_name`, `last_name`, `email`, `phone`, `designation`, `department_id`).
+3. **`students`**: Stores enrolled students (`student_id`, `roll_number`, `first_name`, `last_name`, `email`, `phone`, `department_id`, `semester`, `enrollment_date`, `status`).
+4. **`courses`**: Stores subjects and credits (`course_id`, `course_code`, `course_name`, `credits`, `department_id`, `faculty_id`).
+5. **`enrollments`**: Connects students with courses with grade tracking (`enrollment_id`, `student_id`, `course_id`, `grade`, `enrollment_date`, `status`).
+
+---
+
+## 🔌 REST API Endpoints
+
+| Method | Endpoint | Description |
+|---|---|---|
+| `GET` | `/api/dashboard/stats` | Summary counts, recent students & enrollments |
+| `GET` | `/api/students` | Get all students (supports `?search=` and `?departmentId=`) |
+| `GET` | `/api/students/{id}` | Get student by ID |
+| `POST` | `/api/students` | Enroll a new student |
+| `PUT` | `/api/students/{id}` | Update student details |
+| `DELETE` | `/api/students/{id}` | Remove a student |
+| `GET` | `/api/courses` | Get all courses (supports `?departmentId=`) |
+| `POST` | `/api/courses` | Create a new course |
+| `DELETE` | `/api/courses/{id}` | Remove a course |
+| `GET` | `/api/faculty` | Get faculty and professors directory |
+| `GET` | `/api/departments` | Get departments with student/course counts |
+| `GET` | `/api/enrollments` | Get course enrollments |
+| `POST` | `/api/enrollments` | Register student in a course |
+| `PUT` | `/api/enrollments/{id}/grade`| Assign or update student grade |
+
+---
+
+## 🚀 How to Run the Application
+
+### 1. Database Setup (MySQL)
+Open MySQL Workbench, phpMyAdmin, or your terminal MySQL CLI and run:
+```sql
+SOURCE c:/CollegeManagementSystem/database/schema.sql;
+SOURCE c:/CollegeManagementSystem/database/seed_data.sql;
+```
+Configure your MySQL credentials in `backend/src/main/resources/application.properties`:
+```properties
+spring.profiles.active=mysql
+spring.datasource.url=jdbc:mysql://localhost:3306/college_db?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
+spring.datasource.username=root
+spring.datasource.password=your_password
+```
+*(Note: If you want to run without installing MySQL first, `spring.profiles.active=dev` is pre-configured with an in-memory database and seed data so everything works immediately!)*
+
+### 2. Start the Backend (Spring Boot)
+Double-click `start-backend.bat` or run:
+```powershell
+cd backend
+.\mvnw.cmd spring-boot:run
+```
+The REST API will be accessible at: `http://localhost:8080/api/dashboard/stats`
+
+### 3. Start the Frontend (React)
+Double-click `start-frontend.bat` or run:
+```powershell
+cd frontend
+npm run dev
+```
+Open your browser and navigate to: **`http://localhost:5173`**
+
+---
+
+## ✨ Features
+
+- **Dashboard Overview**: Metric cards (Total Students, Faculty, Courses, Departments), recent enrollments, and quick action shortcuts.
+- **Student Management**: Full CRUD operations, roll number generation, email and phone management, semester tracking, and live search + department filtering.
+- **Course Catalog**: Course cards displaying course codes, credit badges, assigned instructor, and enrollment count.
+- **Faculty Directory**: Professor and Head of Department profile cards with contact details.
+- **Academic Departments**: Department overview with building location and live counts of students, courses, and professors.
+- **Course Enrollments & Grading**: Easy dropdown grade assignment (`A`, `B`, `C`, etc.) and enrollment tracking.
+- **Fail-safe Graceful UI**: The React client includes an automatic connection status indicator in the navbar (`Live Spring Boot + MySQL` vs `Demo Mode`), ensuring the UI displays cleanly even before the database server is booted up.
+>>>>>>> 5661ed9 (Initial commit)
