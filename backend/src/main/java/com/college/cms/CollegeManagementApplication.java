@@ -10,7 +10,7 @@ public class CollegeManagementApplication {
         SpringApplication.run(CollegeManagementApplication.class, args);
         System.out.println("=================================================");
         System.out.println(" College Management System Backend Started!      ");
-        System.out.println(" REST API: http://localhost:8080/api/dashboard  ");
+        System.out.println(" REST API: http://localhost:8081/api/dashboard  ");
         System.out.println("=================================================");
     }
 }

@@ -282,7 +282,7 @@ Double-click `start-backend.bat` or run:
 cd backend
 .\mvnw.cmd spring-boot:run
 ```
-The REST API will be accessible at: `http://localhost:8080/api/dashboard/stats`
+The REST API will be accessible at: `http://localhost:8081/api/dashboard/stats`
 
 ### 3. Start the Frontend (React)
 Double-click `start-frontend.bat` or run:
@@ -303,4 +303,3 @@ Open your browser and navigate to: **`http://localhost:5173`**
 - **Academic Departments**: Department overview with building location and live counts of students, courses, and professors.
 - **Course Enrollments & Grading**: Easy dropdown grade assignment (`A`, `B`, `C`, etc.) and enrollment tracking.
 - **Fail-safe Graceful UI**: The React client includes an automatic connection status indicator in the navbar (`Live Spring Boot + MySQL` vs `Demo Mode`), ensuring the UI displays cleanly even before the database server is booted up.
->>>>>>> 5661ed9 (Initial commit)

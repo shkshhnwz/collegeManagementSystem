@@ -19,7 +19,7 @@ export default function Navbar({ title, isLiveBackend }) {
           ) : (
             <>
               <AlertTriangle size={13} />
-              <span>Demo / Offline Mode (Port 8080)</span>
+              <span>Demo / Offline Mode (Port 8081)</span>
             </>
           )}
         </div>
